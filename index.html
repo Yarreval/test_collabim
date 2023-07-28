@@ -9,6 +9,11 @@
         .wrap {
             text-align: center;
         }
+
+        input,
+        button {
+            padding: 10px;
+        }
     </style>
 </head>
 
@@ -17,7 +22,7 @@
     <div class="wrap">
 
         <h1>Uložení výsledků vyhledávání ve formátu JSON</h1>
-        <input type="search" id="searchInput" placeholder="zadejte vyhledávací dotaz">
+        <input type="search" id="searchInput" placeholder="zadejte dotaz">
         <button onclick="performSearch()">vyhledat</button>
         <button onclick="saveSearchResults()">uložit</button>
 
@@ -54,7 +59,7 @@
                       <h3>${result.title}</h3>
                       <p><a href="${result.link}" target="_blank">${result.link}</a></p>
                       <p>${result.snippet}</p>
-                      <br>
+                      
                       <br>
                       <hr>
                     `;
