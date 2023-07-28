@@ -6,27 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search</title>
     <style>
-        .input_search {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-right: -50%;
-            transform: translate(-50%, -50%)
-        }
-
-        a {
-            text-decoration: none;
+        .wrap {
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-    <div class="input_search">
-        <form action="https://www.google.com/search" method="GET">
-            <input type="search" name="q" id="search" placeholder="Enter your request" required />
-            <button type="submit">Search</button>
-        </form>
+
+    <div class="wrap">
+
+        <h1>Uložení výsledků vyhledávání ve formátu JSON</h1>
+        <input type="search" id="searchInput" placeholder="zadejte vyhledávací dotaz">
+        <button onclick="performSearch()">vyhledat</button>
+        <button onclick="saveSearchResults()">uložit</button>
+
+        <div id="searchResultsContainer"></div>
+
     </div>
+
+    <script>
+
+        let searchResults = [];
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value;
+
+            // my API key & URL API
+            const apiKey = 'AIzaSyArSGbFd4GD8HOEZXlFDAbKlYlXcuA7g5I';
+            const cx = 'a3acf216e04e24f0c';
+            const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${query}&key=${apiKey}&cx=${cx}`;
+
+            // AJAX-> Google Custom Search API
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // get and save result
+                    searchResults = data.items;
+
+                    // show search results on the page
+                    const searchResultsContainer = document.getElementById('searchResultsContainer');
+                    searchResultsContainer.innerHTML = '';
+
+                    for (const result of searchResults) {
+                        const resultElement = document.createElement('div');
+                        resultElement.innerHTML = `
+                      <h3>${result.title}</h3>
+                      <p><a href="${result.link}" target="_blank">${result.link}</a></p>
+                      <p>${result.snippet}</p>
+                      <br>
+                      <br>
+                      <hr>
+                    `;
+                        searchResultsContainer.appendChild(resultElement);
+                    }
+                })
+                .catch(error => {
+                    console.error('Nepodařilo se zpracovat požadavek, chyba:', error);
+                });
+        }
+
+        function saveDataToFile(data, fileName, fileType) {
+            const blob = new Blob([data], { type: fileType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+        }
+
+        function saveSearchResults() {
+            const searchResultsJSON = JSON.stringify(searchResults);
+            saveDataToFile(searchResultsJSON, 'search_results.json', 'application/json');
+        }
+    </script>
+</body>
+
+</html>
+
+
+
 
 </body>
 
