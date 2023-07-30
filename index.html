@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search</title>
+    <title>Search & Save</title>
     <style>
         .wrap {
             text-align: center;
@@ -13,6 +13,10 @@
         input,
         button {
             padding: 10px;
+        }
+
+        button:hover {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -36,13 +40,10 @@
 
         function performSearch() {
             const query = document.getElementById('searchInput').value;
-
-            // my API key & URL API
             const apiKey = 'AIzaSyArSGbFd4GD8HOEZXlFDAbKlYlXcuA7g5I';
             const cx = 'a3acf216e04e24f0c';
             const apiUrl = `https://www.googleapis.com/customsearch/v1?q=${query}&key=${apiKey}&cx=${cx}`;
 
-            // AJAX-> Google Custom Search API
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -59,7 +60,7 @@
                       <h3>${result.title}</h3>
                       <p><a href="${result.link}" target="_blank">${result.link}</a></p>
                       <p>${result.snippet}</p>
-                      
+
                       <br>
                       <hr>
                     `;
